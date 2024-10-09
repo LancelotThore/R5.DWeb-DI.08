@@ -1,10 +1,19 @@
-FROM php:7.4-apache
+# syntax=docker/dockerfile:1
+FROM php:apache
 
-# Installer les extensions nécessaires
-RUN docker-php-ext-install pdo pdo_mysql
+RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
+RUN apt-get update
+RUN apt-get -y install nano
+RUN apt-get install -y git zlib1g-dev
+RUN apt-get install -y libzip-dev && docker-php-ext-install zip
+RUN apt-get install -y libgd-dev && docker-php-ext-configure gd && docker-php-ext-install gd
+RUN docker-php-ext-install mysqli pdo pdo_mysql
+RUN apt-get install -y libicu-dev
+RUN docker-php-ext-install intl
+RUN a2enmod rewrite
+RUN docker-php-ext-enable opcache
+RUN pecl install xdebug && docker-php-ext-enable xdebug
 
-# Copier le fichier php.ini personnalisé
-COPY php.ini /usr/local/etc/php/
+COPY config/zzz.ini /usr/local/etc/php/conf.d/
 
-# Copier le contenu du répertoire www dans le répertoire de l'application web
-COPY www/ /var/www/html/
+EXPOSE 80
