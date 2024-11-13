@@ -22,13 +22,17 @@ function generateCSV($numberOfRows = 5000000, $filename = 'users.csv') {
     $batchSize = 10000;
     $csvData = '';
 
+    // Tableau de noms de domaine
+    $domains = ['example.com', 'test.com', 'sample.org', 'demo.net'];
+
     // Boucle pour générer les données
     for ($i = 0; $i < $numberOfRows; $i++) {
         // Génération des valeurs pour chaque colonne
         $type = rand(1, 5); // Génère un type aléatoire entre 1 et 5
         $name = "User_" . $i; // Nom d'utilisateur unique pour chaque ligne
         $address = "Address_" . $i; // Adresse unique pour chaque ligne
-        $email = "user" . $i . "@example.com"; // Email unique pour chaque ligne
+        $domain = $domains[array_rand($domains)]; // Sélectionne un domaine aléatoire
+        $email = "user" . $i . "@" . $domain; // Email unique pour chaque ligne
 
         // Accumulation des données dans la chaîne
         $csvData .= "$type,$name,$address,$email\n";
